@@ -96,7 +96,7 @@
             Controls.Add(button_load);
             Controls.Add(button_split);
             Name = "Form_Tex";
-            Text = "Form1";
+            Text = "Form_Tex";
             Load += Form_Tex_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
             ResumeLayout(false);

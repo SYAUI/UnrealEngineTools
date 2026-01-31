@@ -12,7 +12,7 @@ namespace UnrealEngineTools
             CheckDB();
             ApplicationConfiguration.Initialize();
             //Application.Run(new Form_Manager());
-            Application.Run(new Form_Tex());
+            Application.Run(new Form_Main());
         }
 
         static void CheckDB()
