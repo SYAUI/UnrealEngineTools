@@ -44,7 +44,7 @@ namespace UnrealEngineTools
                     dialog.InitialDirectory = Path.GetDirectoryName(filepath);
                     if (dialog.ShowDialog() == DialogResult.OK)
                     {
-                        string outpath = dialog.SelectedPath + Path.GetFileNameWithoutExtension(filepath);
+                        string outpath = dialog.SelectedPath + '\\' + Path.GetFileNameWithoutExtension(filepath);
                         mats[0].SaveImage(outpath + "_B.png");
                         mats[0].Dispose();
                         mats[1].SaveImage(outpath + "_G.png");

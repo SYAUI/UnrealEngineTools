@@ -120,7 +120,7 @@ namespace UnrealEngineTools
 
         private void radio_427_CheckedChanged(object sender, EventArgs e)
         {
-            default_version = "4.26\\Saved\\Config\\Windows\\EditorSettings.ini";
+            default_version = "4.27\\Saved\\Config\\Windows\\EditorSettings.ini";
             listView1.Items.Clear();
             InitializeListView();
         }
