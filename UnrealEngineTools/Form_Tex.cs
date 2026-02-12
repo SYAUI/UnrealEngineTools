@@ -91,15 +91,20 @@ namespace UnrealEngineTools
             {
                 if (dialog.ShowDialog() == DialogResult.OK)
                     mats[i] = Cv2.ImRead(dialog.FileName, ImreadModes.Grayscale);//RGB -> BGR
+                else
+                    return;
             }
 
             if(checkBox_merge.Checked == true)
-                mats[3] = Cv2.ImRead(dialog.FileNames[3], ImreadModes.Grayscale);//A
+                if (dialog.ShowDialog() == DialogResult.OK)
+                    mats[3] = Cv2.ImRead(dialog.FileName, ImreadModes.Grayscale);//A
+                else
+                    return;
 
             Cv2.Merge(mats, img);
             SaveFileDialog outpath = new SaveFileDialog();
             outpath.Title = "保存路径";
-            outpath.FileName = "merge.png";//默认文档名
+            outpath.FileName = Path.GetFileNameWithoutExtension(dialog.FileName) + "_ORM.png";//默认文档名
             outpath.Filter = "图像文件(*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png";
             if (outpath.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 Cv2.ImWrite(outpath.FileName, img);
