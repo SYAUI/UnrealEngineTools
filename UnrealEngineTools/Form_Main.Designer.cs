@@ -1,7 +1,5 @@
 ﻿
 
-using IniParser;
-
 namespace UnrealEngineTools
 {
     partial class Form_Main
@@ -39,6 +37,9 @@ namespace UnrealEngineTools
             b_launch = new Button();
             project_tex = new PictureBox();
             b_delete = new Button();
+            b_getlink = new Button();
+            b_getlink2 = new Button();
+            t_link = new TextBox();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)project_tex).BeginInit();
             SuspendLayout();
@@ -131,7 +132,7 @@ namespace UnrealEngineTools
             button_blueprint.Name = "button_blueprint";
             button_blueprint.Size = new Size(75, 23);
             button_blueprint.TabIndex = 1;
-            button_blueprint.Text = "蓝图管理";
+            button_blueprint.Text = "存储库";
             button_blueprint.UseVisualStyleBackColor = true;
             button_blueprint.Click += button_blueprint_Click;
             // 
@@ -173,11 +174,41 @@ namespace UnrealEngineTools
             b_delete.UseVisualStyleBackColor = true;
             b_delete.Click += b_delete_Click;
             // 
+            // b_getlink
+            // 
+            b_getlink.Location = new Point(12, 313);
+            b_getlink.Name = "b_getlink";
+            b_getlink.Size = new Size(75, 23);
+            b_getlink.TabIndex = 8;
+            b_getlink.Text = "解析链接";
+            b_getlink.UseVisualStyleBackColor = true;
+            b_getlink.Click += b_getlink_Click;
+            // 
+            // b_getlink2
+            // 
+            b_getlink2.Location = new Point(12, 342);
+            b_getlink2.Name = "b_getlink2";
+            b_getlink2.Size = new Size(75, 23);
+            b_getlink2.TabIndex = 9;
+            b_getlink2.Text = "解析：";
+            b_getlink2.UseVisualStyleBackColor = true;
+            b_getlink2.Click += b_getlink2_Click;
+            // 
+            // t_link
+            // 
+            t_link.Location = new Point(93, 342);
+            t_link.Name = "t_link";
+            t_link.Size = new Size(100, 23);
+            t_link.TabIndex = 10;
+            // 
             // Form_Main
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(t_link);
+            Controls.Add(b_getlink2);
+            Controls.Add(b_getlink);
             Controls.Add(b_delete);
             Controls.Add(project_tex);
             Controls.Add(b_launch);
@@ -192,6 +223,7 @@ namespace UnrealEngineTools
             groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)project_tex).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -208,5 +240,8 @@ namespace UnrealEngineTools
         private Button b_launch;
         private PictureBox project_tex;
         private Button b_delete;
+        private Button b_getlink;
+        private Button b_getlink2;
+        private TextBox t_link;
     }
 }

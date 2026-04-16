@@ -6,11 +6,14 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Runtime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.DataFormats;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
@@ -58,6 +61,17 @@ namespace UnrealEngineTools
                     listView1.Items.Add(lvi);
                 }
             }
+        }
+
+        private string openfilepath(string title, string filter)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Title = title;
+            dialog.Filter = filter;
+            if (dialog.ShowDialog() == DialogResult.OK)
+                return dialog.FileName;
+            else
+                return "\0";
         }
 
 
@@ -148,9 +162,12 @@ namespace UnrealEngineTools
 
                 tmp_sb.Remove(tmp_sb.Length - 8, 8);
                 tmp_sb.Append("png");
+                // 释放图片内存
+                if (project_tex.Image != null)
+                    project_tex.Image.Dispose();
 
                 if (File.Exists(tmp_sb.ToString())) // 判断自定义项目文件存在
-                    project_tex.Image = Image.FromFile(tmp_sb.ToString());
+                    project_tex.Image = System.Drawing.Image.FromFile(tmp_sb.ToString());
                 else
                 {
                     for (int i = tmp_sb.Length - 1; i > 0; i--)
@@ -160,7 +177,7 @@ namespace UnrealEngineTools
                             break;
                         }
                     tmp_sb.Append("Saved/AutoScreenshot.png");
-                    project_tex.Image = Image.FromFile(tmp_sb.ToString());
+                    project_tex.Image = System.Drawing.Image.FromFile(tmp_sb.ToString());
                 }
                 b_launch.Enabled = true;
             }
@@ -181,7 +198,7 @@ namespace UnrealEngineTools
                 project_path = Path.GetDirectoryName(project_path);
             else
                 return;
-            if ((int)MessageBox.Show("你确定需要删除此项目("+ project_path + ")吗", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) != 1) { return; }
+            if ((int)MessageBox.Show("你确定需要删除此项目(" + project_path + ")吗", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) != 1) { return; }
             {
                 // 删除索引
                 List<string> lines = System.IO.File.ReadAllLines(inipath, Encoding.Default).ToList();
@@ -198,6 +215,69 @@ namespace UnrealEngineTools
                 InitializeListView();
                 return;
             }
+        }
+
+        private void b_getlink_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.CheckFileExists = false;
+
+            string path = "文件或文件夹";
+            ofd.FileName = path;
+
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                if (!ofd.FileName.Contains(path))
+                {
+                    path = ofd.FileName;
+                    if (File.Exists(path))
+                    {
+                        MessageBox.Show("目标路径为：" + path, "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+
+                }
+                else
+                {
+                    path = ofd.FileName;
+                    path = path.Substring(0, path.Length - 6);
+                    DirectoryInfo dirInfo = new DirectoryInfo(path);
+                    if (dirInfo.Attributes.HasFlag(FileAttributes.ReparsePoint))
+                    {
+                        path = Directory.ResolveLinkTarget(path, true).FullName;
+                        MessageBox.Show("文件夹真实路径为：" + path, "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    else
+                        MessageBox.Show("目标文件夹不是一个目录链接", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                }
+            }
+
+
+
+        }
+
+        private void b_getlink2_Click(object sender, EventArgs e)
+        {
+            string linkPath = t_link.Text;
+            if (File.Exists(linkPath))
+            {
+                FileInfo fileInfo = new FileInfo(linkPath);
+                if (fileInfo.LinkTarget != null)
+                    linkPath = fileInfo.LinkTarget;
+               
+                MessageBox.Show("目标路径为：" + linkPath, "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            if (Directory.Exists(linkPath))
+            {
+                DirectoryInfo dirInfo = new DirectoryInfo(linkPath);
+                if (dirInfo.LinkTarget != null)
+                    linkPath = dirInfo.LinkTarget;
+
+                MessageBox.Show("目标路径为：" + linkPath, "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
+                MessageBox.Show("目标不存在", "警告", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
         }
     }
 }
